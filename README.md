@@ -46,6 +46,8 @@ For a **project** GitHub Pages URL (`https://<user>.github.io/<repo>/`), the bui
 1. In the repo: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 2. Push to **`main`** (or **`master`**). The workflow **Deploy to GitHub Pages** runs `npm run generate` and publishes `.output/public`.
 
+If the live URL (including a custom domain) shows the **repository README** or raw repo files instead of the marketing site, Pages is still publishing from a **branch** (repo root) rather than from the Actions artifact. There is no `index.html` at the repo root—only Nuxt’s output under **`.output/public`** after `generate`—so GitHub ends up effectively serving project files. Switch **Source** to **GitHub Actions**, wait for a green **Deploy to GitHub Pages** run, then hard-refresh.
+
 Base URL logic in the workflow:
 
 - If the repository variable **`NUXT_APP_BASE_URL`** is set, that value wins (use **`/`** for a custom apex domain).

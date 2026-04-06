@@ -27,17 +27,32 @@ jobs:
       - run: npm ci
       - name: Set Nuxt base URL
         run: |
-          # Custom domains on GitHub Pages are always served from /. Project repos default to
-          # /<repo>/ for https://<owner>.github.io/<repo>/ — override when using a custom domain.
-          OVERRIDE="${{ vars.NUXT_APP_BASE_URL }}"
+          trim() { printf '%s' "$1" | tr -d '\r\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//'; }
+          BASE=""
+          # 1) Repository variable (optional): highest priority
+          OVERRIDE=$(trim "${{ vars.NUXT_APP_BASE_URL }}")
           if [ -n "$OVERRIDE" ]; then
-            echo "NUXT_APP_BASE_URL=$OVERRIDE" >> "$GITHUB_ENV"
-            echo "Using repository variable NUXT_APP_BASE_URL=$OVERRIDE"
-          elif [ "${{ github.event.repository.name }}" = "${{ github.repository_owner }}.github.io" ]; then
-            echo "NUXT_APP_BASE_URL=/" >> "$GITHUB_ENV"
-          else
-            echo "NUXT_APP_BASE_URL=/${{ github.event.repository.name }}/" >> "$GITHUB_ENV"
+            BASE="$OVERRIDE"
+            echo "Using Actions variable NUXT_APP_BASE_URL=$BASE"
+          # 2) Committed file: e.g. / for custom apex domains (no GitHub variable needed)
+          elif [ -f .github/pages-base-url ]; then
+            B=$(trim "$(cat .github/pages-base-url)")
+            if [ -n "$B" ]; then
+              BASE="$B"
+              echo "Using .github/pages-base-url: $BASE"
+            fi
           fi
+          if [ -z "$BASE" ]; then
+            if [ "${{ github.event.repository.name }}" = "${{ github.repository_owner }}.github.io" ]; then
+              BASE="/"
+              echo "User/org Pages repo: base /"
+            else
+              BASE="/${{ github.event.repository.name }}/"
+              echo "Project repo default: base $BASE"
+            fi
+          fi
+          echo "NUXT_APP_BASE_URL=$BASE" >> "$GITHUB_ENV"
+          echo "Final NUXT_APP_BASE_URL=$BASE"
       - run: npm run generate
       - uses: actions/upload-pages-artifact@v3
         with:

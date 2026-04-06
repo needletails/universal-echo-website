@@ -39,7 +39,7 @@ npx serve .output/public
 
 For a **project** GitHub Pages URL (`https://<user>.github.io/<repo>/`), the build must use base `/<repo>/`. The included workflow sets this automatically. For a **user** site repo named `<user>.github.io`, the workflow sets base to `/`.
 
-**Custom domain (e.g. `https://universal-echo.com/`):** GitHub Pages serves the site from **`/`**, not `/<repository-name>/`. For a project repo the workflow would otherwise build with `/<repo>/`, so CSS and JS requests miss and assets break. Add a repository **Actions variable** **`NUXT_APP_BASE_URL`** set to **`/`** under **Settings → Secrets and variables → Actions → Variables**, then re-run **Deploy to GitHub Pages** (or push a commit).
+**Custom domain (e.g. `https://universal-echo.com/`):** GitHub Pages serves the site from **`/`**, not `/<repository-name>/`. This repo includes **`.github/pages-base-url`** (contents **`/`**) so CI builds with **`NUXT_APP_BASE_URL=/`** and asset URLs match the apex domain. You can override with a repository **Actions variable** **`NUXT_APP_BASE_URL`** if needed. If you rely on **`https://<owner>.github.io/<repo>/`** only, delete or change **`.github/pages-base-url`** so the workflow falls back to **`/<repo>/`**, or set the variable to **`/<repo>/`**.
 
 ## Deploy to GitHub Pages
 
@@ -50,7 +50,8 @@ If the live URL (including a custom domain) shows the **repository README** or r
 
 Base URL logic in the workflow:
 
-- If the repository variable **`NUXT_APP_BASE_URL`** is set, that value wins (use **`/`** for a custom apex domain).
+- If the repository variable **`NUXT_APP_BASE_URL`** is set (non-empty), that value wins.
+- Else if **`.github/pages-base-url`** exists with a non-empty line, that value is used (this repo uses **`/`** for the custom domain).
 - Else if the repository name is **`<owner>.github.io`**, `NUXT_APP_BASE_URL=/`.
 - Otherwise, `NUXT_APP_BASE_URL=/<repository-name>/`.
 

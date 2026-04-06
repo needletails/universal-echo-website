@@ -27,7 +27,13 @@ jobs:
       - run: npm ci
       - name: Set Nuxt base URL
         run: |
-          if [ "${{ github.event.repository.name }}" = "${{ github.repository_owner }}.github.io" ]; then
+          # Custom domains on GitHub Pages are always served from /. Project repos default to
+          # /<repo>/ for https://<owner>.github.io/<repo>/ — override when using a custom domain.
+          OVERRIDE="${{ vars.NUXT_APP_BASE_URL }}"
+          if [ -n "$OVERRIDE" ]; then
+            echo "NUXT_APP_BASE_URL=$OVERRIDE" >> "$GITHUB_ENV"
+            echo "Using repository variable NUXT_APP_BASE_URL=$OVERRIDE"
+          elif [ "${{ github.event.repository.name }}" = "${{ github.repository_owner }}.github.io" ]; then
             echo "NUXT_APP_BASE_URL=/" >> "$GITHUB_ENV"
           else
             echo "NUXT_APP_BASE_URL=/${{ github.event.repository.name }}/" >> "$GITHUB_ENV"

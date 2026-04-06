@@ -39,6 +39,8 @@ npx serve .output/public
 
 For a **project** GitHub Pages URL (`https://<user>.github.io/<repo>/`), the build must use base `/<repo>/`. The included workflow sets this automatically. For a **user** site repo named `<user>.github.io`, the workflow sets base to `/`.
 
+**Custom domain (e.g. `https://universal-echo.com/`):** GitHub Pages serves the site from **`/`**, not `/<repository-name>/`. For a project repo the workflow would otherwise build with `/<repo>/`, so CSS and JS requests miss and assets break. Add a repository **Actions variable** **`NUXT_APP_BASE_URL`** set to **`/`** under **Settings → Secrets and variables → Actions → Variables**, then re-run **Deploy to GitHub Pages** (or push a commit).
+
 ## Deploy to GitHub Pages
 
 1. In the repo: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
@@ -46,7 +48,8 @@ For a **project** GitHub Pages URL (`https://<user>.github.io/<repo>/`), the bui
 
 Base URL logic in the workflow:
 
-- If the repository name is **`<owner>.github.io`**, `NUXT_APP_BASE_URL=/`.
+- If the repository variable **`NUXT_APP_BASE_URL`** is set, that value wins (use **`/`** for a custom apex domain).
+- Else if the repository name is **`<owner>.github.io`**, `NUXT_APP_BASE_URL=/`.
 - Otherwise, `NUXT_APP_BASE_URL=/<repository-name>/`.
 
 ## Configuration notes

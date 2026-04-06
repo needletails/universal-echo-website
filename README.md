@@ -1,85 +1,60 @@
-# Nuxt Minimal Starter
+# Universal Echo — Website
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Static marketing site for **Universal Echo**, a consulting and resource allocation firm with deep specialization in information technology. Built with [Nuxt 4](https://nuxt.com/) and exported as plain HTML/CSS/JS for hosting on **GitHub Pages** (or any static host).
 
-## Setup
+## What’s in the repo
 
-Make sure to install dependencies:
+- **`app/app.vue`** — Single-page layout: hero, capabilities, engagement model, approach, contact, footer.
+- **`app/assets/css/main.css`** — Global styles, light/dark via `prefers-color-scheme`, typography (Inter + Montserrat wordmark).
+- **`public/`** — Static assets: `universal-echo-logo.svg` (favicon + brand), `robots.txt`, and related logo files.
+- **`.github/workflows/deploy-github-pages.yml`** — CI: `npm ci`, `nuxt generate`, deploy `/.output/public` to GitHub Pages.
+
+Contact on the site: **inquiry@universal-echo.com**.
+
+## Prerequisites
+
+- Node.js 20+ (CI uses 22)
+- npm
+
+## Local development
 
 ```bash
-# npm
 npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
 npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
+Open [http://localhost:3000](http://localhost:3000). The app uses `NUXT_APP_BASE_URL` from the environment when set; locally it defaults to `/`.
 
-Build the application for production:
+## Static build (production)
 
 ```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
+npm run generate
 ```
 
-Locally preview production build:
+Output is in **`.output/public`**. Preview locally:
 
 ```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
+npx serve .output/public
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+For a **project** GitHub Pages URL (`https://<user>.github.io/<repo>/`), the build must use base `/<repo>/`. The included workflow sets this automatically. For a **user** site repo named `<user>.github.io`, the workflow sets base to `/`.
 
-## GitHub Pages
+## Deploy to GitHub Pages
 
-This site is a static export (`nuxt generate`). Upload the contents of `.output/public` to any static host, or use the included workflow.
+1. In the repo: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+2. Push to **`main`** (or **`master`**). The workflow **Deploy to GitHub Pages** runs `npm run generate` and publishes `.output/public`.
 
-1. In the repository **Settings → Pages**, set **Source** to **GitHub Actions**.
-2. Push to `main` (or `master`). The workflow builds with `NUXT_APP_BASE_URL` set to `/<repository-name>/`, which matches the default URL for a **project** site (`https://<user>.github.io/<repository-name>/`).
-3. For a **user or organization** site (repository named `<user>.github.io`), set the base URL to `/` instead: run `NUXT_APP_BASE_URL=/ npm run generate` locally and deploy `.output/public`, or change the workflow env to `/`.
+Base URL logic in the workflow:
 
-Replace the placeholder contact address `hello@universalecho.com` in `app/app.vue` with your real email when ready.
+- If the repository name is **`<owner>.github.io`**, `NUXT_APP_BASE_URL=/`.
+- Otherwise, `NUXT_APP_BASE_URL=/<repository-name>/`.
+
+## Configuration notes
+
+- **`nuxt.config.ts`** — `nitro.preset: 'static'`, `app.baseURL` from `NUXT_APP_BASE_URL`, favicon links point at `universal-echo-logo.svg` under the same base.
+- **Fonts** load from Google Fonts (see `nuxt.config.ts` `app.head.link`).
+
+## Further reading
+
+- [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction)
+- [Nuxt static hosting](https://nuxt.com/docs/getting-started/deployment#static-hosting)

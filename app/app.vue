@@ -3,6 +3,105 @@ const config = useRuntimeConfig()
 const base = config.app.baseURL || '/'
 const asset = (name: string) => `${base.endsWith('/') ? base : `${base}/`}${name}`
 const logoHeaderSrc = asset('universal-echo-logo.svg')
+const siteUrl = (config.public.siteUrl || 'https://universal-echo.com').replace(/\/+$/, '')
+const normalizedBase = base.startsWith('/') ? base : `/${base}`
+const normalizedBaseWithTrailingSlash = normalizedBase.endsWith('/')
+  ? normalizedBase
+  : `${normalizedBase}/`
+const canonicalUrl = `${siteUrl}${normalizedBaseWithTrailingSlash}`
+const ogImageUrl = `${siteUrl}${normalizedBaseWithTrailingSlash}og-image.svg`
+const pageTitle = 'Universal Echo — Consulting & resource allocation'
+const pageDescription =
+  'Consultants and resource allocators specializing in IT. Consulting, technical judgment, and resource allocation for organizations navigating complex change.'
+
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  '@id': `${canonicalUrl}#organization`,
+  name: 'Universal Echo',
+  url: canonicalUrl,
+  email: 'inquiry@universal-echo.com',
+  description:
+    'Consulting and resource allocation firm specializing in information technology, technical judgment, and high-stakes delivery.',
+  logo: `${siteUrl}${normalizedBaseWithTrailingSlash}universal-echo-logo.svg`,
+}
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': `${canonicalUrl}#website`,
+  url: canonicalUrl,
+  name: 'Universal Echo',
+  description:
+    'Consultants and resource allocators specializing in IT, technical judgment, and complex organizational change.',
+  publisher: {
+    '@id': `${canonicalUrl}#organization`,
+  },
+  inLanguage: 'en',
+}
+
+useSeoMeta({
+  title: pageTitle,
+  description: pageDescription,
+  keywords:
+    'Consulting, technology consulting, resource allocation, technical advisory, software architecture, digital transformation, enterprise technology strategy',
+  author: 'Universal Echo',
+  robots: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
+  ogLocale: 'en_US',
+  ogType: 'website',
+  ogSiteName: 'Universal Echo',
+  ogTitle: pageTitle,
+  ogDescription: pageDescription,
+  ogUrl: canonicalUrl,
+  ogImage: ogImageUrl,
+  ogImageAlt: 'Universal Echo wordmark on a dark blue background',
+  ogImageType: 'image/svg+xml',
+  ogImageWidth: '1200',
+  ogImageHeight: '630',
+  twitterCard: 'summary_large_image',
+  twitterTitle: pageTitle,
+  twitterDescription: pageDescription,
+  twitterImage: ogImageUrl,
+})
+
+useHead({
+  htmlAttrs: { lang: 'en' },
+  titleTemplate: '%s',
+  meta: [
+    { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+    { name: 'theme-color', content: '#f4f6f9', media: '(prefers-color-scheme: light)' },
+    { name: 'theme-color', content: '#09090b', media: '(prefers-color-scheme: dark)' },
+  ],
+  link: [
+    { rel: 'canonical', href: canonicalUrl },
+    { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+    { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
+    {
+      rel: 'icon',
+      type: 'image/svg+xml',
+      href: `${normalizedBaseWithTrailingSlash}universal-echo-logo.svg`,
+    },
+    {
+      rel: 'shortcut icon',
+      type: 'image/svg+xml',
+      href: `${normalizedBaseWithTrailingSlash}universal-echo-logo.svg`,
+    },
+    {
+      rel: 'stylesheet',
+      href: 'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&family=Montserrat:wght@600;700;800&display=swap',
+    },
+  ],
+  script: [
+    {
+      type: 'application/ld+json',
+      textContent: JSON.stringify(organizationSchema),
+    },
+    {
+      type: 'application/ld+json',
+      textContent: JSON.stringify(websiteSchema),
+    },
+  ],
+})
 
 const navOpen = ref(false)
 

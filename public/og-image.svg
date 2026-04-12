@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Universal Echo</title>
+  <desc id="desc">Consulting and resource allocation specializing in information technology.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#0b1f39" />
+      <stop offset="100%" stop-color="#1f4d7a" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <circle cx="1008" cy="126" r="220" fill="#ffffff" opacity="0.06" />
+  <circle cx="144" cy="548" r="300" fill="#ffffff" opacity="0.05" />
+  <text x="96" y="290" fill="#f4f6f9" font-size="84" font-weight="800" font-family="Inter, Arial, sans-serif" letter-spacing="2">UNIVERSAL</text>
+  <text x="96" y="380" fill="#f4f6f9" font-size="84" font-weight="800" font-family="Inter, Arial, sans-serif" letter-spacing="2">ECHO</text>
+  <text x="96" y="458" fill="#d8e5f0" font-size="34" font-weight="500" font-family="Inter, Arial, sans-serif">Consulting and Resource Allocation</text>
+  <text x="96" y="505" fill="#c3d7e7" font-size="29" font-weight="400" font-family="Inter, Arial, sans-serif">Specialized in Information Technology</text>
+</svg>

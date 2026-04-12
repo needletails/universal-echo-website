@@ -55,6 +55,12 @@ Base URL logic in the workflow:
 - Else if the repository name is **`<owner>.github.io`**, `NUXT_APP_BASE_URL=/`.
 - Otherwise, `NUXT_APP_BASE_URL=/<repository-name>/`.
 
+Canonical URL logic in the workflow:
+
+- If the repository variable **`NUXT_PUBLIC_SITE_URL`** is set (non-empty), that value is used for canonical/OpenGraph/sitemap URLs.
+- Else if **`CNAME`** exists, the workflow uses `https://<CNAME-host>`.
+- Otherwise, it falls back to `https://<owner>.github.io`.
+
 ## Configuration notes
 
 - **`nuxt.config.ts`** — `nitro.preset: 'static'`, `app.baseURL` from `NUXT_APP_BASE_URL`, favicon links point at `universal-echo-logo.svg` under the same base.
